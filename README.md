@@ -1,3 +1,3 @@
-first code of nlw 6
+first code of nlw 6 - 
 
 together
