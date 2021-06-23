@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 
 import { useAuth } from '../hooks/useAuth';
@@ -10,7 +12,16 @@ import '../styles/auth.scss';
 
 export function NewRoom() {
 
-    // const { user } = useAuth;
+    //const { user } = useAuth();
+    const [newRoom, setNewRoom] = useState('');
+
+    async function handleCreateRoom(event: FormEvent) {
+
+        // impede que o formulario abra uma nova pagina no submit
+        event.preventDefault();
+
+
+    }
 
     return (
         <div id='page-auth'>
@@ -23,10 +34,11 @@ export function NewRoom() {
                 <div className="main-content">
                     <img src={logoImg} alt='Letmeask' />
                     <h2> Crair uma nova sala </h2>
-                    <form>
+                    <form onSubmit={handleCreateRoom}>
                         <input
                             type='text'
                             placeholder='Nome da sala'
+                            onChange={event => setNewRoom(event.target.value)}
                         />
                         <Button type='submit'>
                             Entrar na sala
