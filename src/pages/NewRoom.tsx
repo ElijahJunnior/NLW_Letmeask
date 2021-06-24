@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { FormEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import { useAuth } from '../hooks/useAuth';
+import { database } from '../services/firebase';
 import { Button } from '../components/Button';
 
 import illustrationImg from '../assets/images/illustration.svg';
@@ -12,7 +13,8 @@ import '../styles/auth.scss';
 
 export function NewRoom() {
 
-    //const { user } = useAuth();
+    const { user } = useAuth();
+    const history = useHistory();
     const [newRoom, setNewRoom] = useState('');
 
     async function handleCreateRoom(event: FormEvent) {
@@ -20,6 +22,22 @@ export function NewRoom() {
         // impede que o formulario abra uma nova pagina no submit
         event.preventDefault();
 
+        // valida se o usuario informou o nome da sala
+        if (newRoom === '') {
+            return;
+        }
+
+        // cria/faz referencia a um grupo de objetos na RelatimeDatabase
+        const roomRef = database.ref('rooms');
+
+        // Adiciona um novo elemento no grupo referenciado na RealtimeDatabase
+        const firebaseRoom = await roomRef.push({
+            title: newRoom,
+            authorId: user?.id,
+        })
+
+        // Navega até a pagina usando a key do registro na base
+        history.push(`/rooms/${firebaseRoom.key}`)
 
     }
 
@@ -39,6 +57,7 @@ export function NewRoom() {
                             type='text'
                             placeholder='Nome da sala'
                             onChange={event => setNewRoom(event.target.value)}
+                            value={newRoom}
                         />
                         <Button type='submit'>
                             Entrar na sala
