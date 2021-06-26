@@ -37,7 +37,7 @@ export function NewRoom() {
         })
 
         // Navega até a pagina usando a key do registro na base
-        history.push(`/rooms/${firebaseRoom.key}`)
+        history.push(`/admin/rooms/${firebaseRoom.key}`)
 
     }
 
