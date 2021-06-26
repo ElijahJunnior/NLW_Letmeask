@@ -4,10 +4,24 @@
 <img src="./.github/logo.svg"/>
 </p>
 
-## 🚀 Tecnologias
+<h2>🚀 Technologies </h2>
 
-Esse projeto foi desenvolvido com as seguintes tecnologias:
+This project is desenvolve with the following technologies
 
 - [React](https://reactjs.org)
 - [Firebase](https://firebase.google.com/)
+
+<hr />
+
+<h2>💬 About</h2>
+
+<p> Let me ask is a web app to promote interaction between users and influencers </p>
+
+<hr />
+
+<h2>👀 Live Preview</h2>
+
+<a href="https://letmeask-8b2c9.web.app/">Let me ask</a>
+
+
 
