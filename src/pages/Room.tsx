@@ -1,39 +1,21 @@
-import { FormEvent, useState } from 'react';
+import { useEffect, useState, FormEvent } from 'react';
 import { useParams } from 'react-router-dom';
+
+import { useAuth } from '../hooks/useAuth';
+import { useRoom } from '../hooks/useRoom';
+
+import { database } from '../services/firebase';
 
 import { Button } from '../components/Button';
 import { RoomCode } from '../components/RoomCode';
-import { useAuth } from '../hooks/useAuth';
+import { Question } from '../components/Question';
 
 import logoImg from '../assets/images/logo.svg';
 
 import '../styles/room.scss';
-import { database } from '../services/firebase';
-import { useEffect } from 'react';
 
 type RoomParams = {
     id: string;
-}
-
-type FirebaseQuestions = Record<string, {
-    author: {
-        name: string;
-        avatar: string;
-    }
-    content: string;
-    isAnswered: boolean;
-    isHighlighted: boolean;
-}>
-
-type Question = {
-    id: string;
-    author: {
-        name: string;
-        avatar: string;
-    }
-    content: string;
-    isAnswered: boolean;
-    isHighlighted: boolean;
 }
 
 export function Room() {
@@ -41,49 +23,8 @@ export function Room() {
     const { user } = useAuth();
     const params = useParams<RoomParams>();
     const [newQuestion, setNewQuestion] = useState('');
-    const [questions, setQuestions] = useState<Question[]>([]);
-    const [title, setTitle] = useState('');
-
     const roomId = params.id;
-
-    useEffect(() => {
-
-        // busco no Realtime Database os dados da sala selecionada 
-        const roomRef = database.ref(`rooms/${roomId}`);
-
-
-        // roomRef.once -  pegar uma vez todos os registros de elemento referenciado
-        // roomRef.on -  pegar todos os registros (no inicio e sempre que ouver uma alteração) 
-        roomRef.on('value', room => {
-
-            //crio uma varivale com os dados contidos em room
-            const databaseRoom = room.val();
-
-            // Converto os questions selecionados em uma coleção de um deteminado tipo
-            // Caso a const databaseRoom tenha vindo undefined passo uma obj vazio
-            const firebaseQuestions: FirebaseQuestions = databaseRoom.questions ?? {};
-
-            // entries -> Converto o Record de Questions da Base em uma array
-            const parsedQuestions = Object.entries(firebaseQuestions).map(([key, value]) => {
-                // map -> varre a array retornando um objeto que combine com o modelo da room
-                return {
-                    id: key,
-                    content: value.content,
-                    author: value.author,
-                    isHighlighted: value.isHighlighted,
-                    isAnswered: value.isAnswered,
-                }
-            });
-
-            // Exibe o titulo da sala
-            setTitle(databaseRoom.title);
-
-            // Exibe o titulo 
-            setQuestions(parsedQuestions);
-
-        })
-
-    }, [roomId]);
+    const { title, questions } = useRoom(roomId);
 
     async function handleSendQuestion(event: FormEvent) {
 
@@ -158,7 +99,17 @@ export function Room() {
 
                 </form>
 
-                {JSON.stringify(questions)}
+                <div className='question-list'>
+                    {questions.map(question => {
+                        return (
+                            <Question
+                                key={question.id}
+                                content={question.content}
+                                author={question.author}
+                            />
+                        )
+                    })}
+                </div>
 
             </main>
 
