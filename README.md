@@ -1,5 +1,13 @@
-nlw 6 - class 1 - together
-nlw 6 - class 2 - unidade
-nlw 6 - class 3 - embuscadeevolução
-nlw 6 - class 4 - legacy
-nlw 6 - class 5 - juntos no próximo nivel
+<h1 align="center">Next Level Week 6 - Together</h1>
+
+<p align="center">
+<img src="./.github/logo.svg"/>
+</p>
+
+## 🚀 Tecnologias
+
+Esse projeto foi desenvolvido com as seguintes tecnologias:
+
+- [React](https://reactjs.org)
+- [Firebase](https://firebase.google.com/)
+
